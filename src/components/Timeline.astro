@@ -1,0 +1,96 @@
+---
+import { Clock, ClipboardPen, FileUp, Gavel, Megaphone, Users } from '@lucide/astro';
+import { event } from '../data/event';
+import { STATUS_LABEL, TBA, effectiveEnds, formatDate, formatRange, timelineStatus } from '../utils/event-helpers';
+
+// Ikon per tahap (urutan mengikuti timeline di event.ts).
+const ICONS = [ClipboardPen, FileUp, Gavel, Megaphone, Users];
+
+const ends = effectiveEnds(event.timeline);
+const items = event.timeline.map((t, i) => ({
+  ...t,
+  no: String(i + 1).padStart(2, '0'),
+  Icon: ICONS[i % ICONS.length]!,
+  dateText: t.openEnded && !t.end && t.start ? `Mulai ${formatDate(t.start)}` : formatRange(t.start, t.end),
+  effEnd: ends[i] ?? null,
+  status: timelineStatus({ ...t, end: ends[i] ?? null }),
+}));
+const anyMissing = items.some((t) => !t.start);
+const count = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan'][items.length - 1] ?? String(items.length);
+const first = items[0]?.title.toLowerCase();
+const last = items.at(-1)?.title.toLowerCase();
+---
+
+<section id="timeline" class="section on-light bg-surface max-sm:[--hm:2]" aria-labelledby="timeline-title">
+  <div class="wrap flex flex-col max-sm:min-h-[calc(200svh-var(--padt)-var(--padb))] lg:min-h-[calc(100svh-var(--padt)-var(--padb))]">
+    <div class="grid gap-y-4 lg:grid-cols-12 lg:gap-x-6">
+      <div class="lg:col-span-7">
+        <p class="label text-muted">Timeline</p>
+        <h2 id="timeline-title" class="h2 mt-4">Timeline acara</h2>
+      </div>
+      <p class="max-w-[44ch] text-lead lg:col-span-5 lg:col-start-8">
+        {count} tahap Digital Canvas, dari {first} sampai {last}.
+        {anyMissing && <span> Tanggal tiap tahap diumumkan panitia.</span>}
+      </p>
+    </div>
+
+    <ol class="relative mt-10 grid max-sm:flex max-sm:flex-1 max-sm:flex-col max-sm:justify-between md:grid-cols-2 md:gap-x-6 md:gap-y-14 lg:mt-auto lg:grid-cols-5 lg:gap-y-0 lg:pt-16">
+      <!-- garis lintasan -->
+      <span class="absolute top-0 bottom-0 left-[7px] w-px bg-teal-deep/30 md:hidden lg:block lg:top-[calc(4rem+7px)] lg:right-0 lg:bottom-auto lg:left-0 lg:h-px lg:w-auto" aria-hidden="true"></span>
+      {
+        items.map((t) => (
+          <li
+            class="group relative pb-6 pl-10 last:pb-0 md:pb-0 md:pl-0 lg:pt-12"
+            data-timeline-item
+            data-start={t.start ?? undefined}
+            data-end={t.effEnd ?? undefined}
+            data-open-ended={t.openEnded && !t.effEnd ? '' : undefined}
+            data-status={t.status ?? undefined}
+          >
+            <span
+              class="absolute top-0 left-0 grid size-[15px] place-items-center rounded-full border-2 border-teal-deep bg-surface group-data-[status=ongoing]:bg-peach md:hidden lg:grid"
+              aria-hidden="true"
+            >
+              <span class="size-[5px] rounded-full bg-teal-deep" />
+            </span>
+
+            <div class="flex items-end gap-5">
+            <span
+              class="block w-[1.3em] shrink-0 font-display text-[3.75rem] leading-[0.8] sm:text-[4.5rem] font-bold text-transparent [-webkit-text-stroke:1.5px_var(--color-teal-deep)] lg:text-[min(8.5rem,14svh)]"
+              aria-hidden="true"
+            >
+              {t.no}
+            </span>
+            <t.Icon size={40} stroke-width={1.5} aria-hidden="true" class="mb-1 shrink-0 text-teal-deep" />
+            </div>
+
+            <p class="mt-4 inline-flex items-center gap-2 font-display sm:mt-5 text-[1.0625rem] font-medium tracking-wide uppercase">
+              {t.dateText ? (
+                <time datetime={t.start ?? undefined}>{t.dateText}</time>
+              ) : (
+                <span class="border-b-2 border-peach text-teal-deep">{TBA}</span>
+              )}
+            </p>
+            {t.time && (
+              <p class="mt-1 inline-flex items-center gap-1.5 text-small text-muted">
+                <Clock size={14} aria-hidden="true" />
+                {t.time}
+              </p>
+            )}
+
+            <h3 class="mt-2 text-h3 leading-tight sm:mt-3 font-semibold uppercase">{t.title}</h3>
+            <p class="mt-2 max-w-[30ch]">{t.description}</p>
+
+            <p
+              class:list={['mt-4 text-label font-semibold tracking-wide uppercase', !t.status && 'hidden']}
+              data-status-label
+            >
+              <span class="sr-only">Status: </span>
+              <span data-status-text>{t.status ? STATUS_LABEL[t.status] : ''}</span>
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

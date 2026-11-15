@@ -1,0 +1,11 @@
+{
+ "page": "dist/index.html",
+ "url": null,
+ "root": "dist",
+ "kind": "service",
+ "category": "bootcamp dan kompetisi rekayasa perangkat lunak",
+ "primary": "Daftar Sekarang",
+ "rounds": 3,
+ "start": "2026-11-15T05:15:44.356Z",
+ "by": "gate.mjs --start"
+}

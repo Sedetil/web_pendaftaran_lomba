@@ -1,0 +1,131 @@
+---
+import { ArrowUpRight, ArrowDown } from '@lucide/astro';
+import Logo from './Logo.astro';
+import { event } from '../data/event';
+import { nav, primaryCta } from '../config/site';
+import { TBA, isValidHttpsUrl, primaryTarget } from '../utils/event-helpers';
+
+const cta = primaryTarget(event);
+const ext = cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+const year = new Date().getFullYear();
+
+const contacts = [
+  event.contact.whatsapp && {
+    label: `WhatsApp${event.contact.name ? ` (${event.contact.name})` : ''}`,
+    href: `https://wa.me/${event.contact.whatsapp.replace(/\D/g, '')}`,
+    external: true,
+  },
+  event.contact.email && { label: 'Email panitia', href: `mailto:${event.contact.email}`, external: false },
+].filter(Boolean) as { label: string; href: string; external: boolean }[];
+
+const socials = event.socials.filter((s) => isValidHttpsUrl(s.url));
+const footerNav = nav.filter((n) => n.href !== '#home');
+---
+
+<footer id="contact" class="closing on-dark grain relative isolate overflow-hidden bg-abyss text-paper">
+  <div class="wrap flex min-h-svh flex-col pt-(--padt) pb-(--padb)">
+    <!-- Baris 1: penutup (ajakan daftar + wordmark) -->
+    <div class="flex flex-1 flex-col">
+    <div class="grid gap-y-8 lg:grid-cols-12 lg:items-end lg:gap-x-6">
+      <div class="lg:col-span-7">
+        <p class="font-display text-[clamp(1.375rem,1rem+1.4vw,2.25rem)] leading-tight font-semibold text-peach">
+          {event.tagline}
+        </p>
+        <h2 class="h2 mt-4">Daftar Digital Canvas</h2>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-8 lg:flex lg:justify-end">
+        <a href={cta.href} {...ext} class="btn btn--primary w-full sm:w-auto" data-cta="footer">
+          {primaryCta}
+          {cta.external ? <ArrowUpRight size={18} aria-hidden="true" /> : <ArrowDown size={18} aria-hidden="true" />}
+          {cta.external && <span class="sr-only">(membuka tab baru)</span>}
+        </a>
+      </div>
+    </div>
+
+    <!-- Wordmark besar (footer-dark) -->
+    <p
+      class="mt-12 font-display text-[min(calc((100vw-2*var(--gut))/6.62),12.05rem)] leading-[0.82] font-bold whitespace-nowrap uppercase lg:mt-auto lg:pt-12"
+      aria-hidden="true"
+    >
+      <span class="text-transparent [-webkit-text-stroke:1.5px_rgb(248_244_236/0.55)]">Digital</span>
+      <span class="ml-[0.16em] text-peach">Canvas</span>
+    </p>
+
+    </div>
+
+    <!-- Baris 2: direktori + baris legal -->
+    <div>
+    <div class="grid grid-cols-2 gap-x-6 gap-y-10 pt-10 sm:grid-cols-12">
+      <div class="col-span-2 sm:col-span-12 lg:col-span-5">
+        <a href="#home" class="inline-flex min-h-11 items-center" aria-label={`${event.name}, ke awal halaman`}>
+          <Logo />
+        </a>
+        <p class="mt-4 max-w-[36ch] text-small text-on-dark-muted">
+          {`${event.identity}. Diselenggarakan oleh Program Studi ${event.organizer.studyProgram}, ${event.organizer.department}, ${event.organizer.institution}.`}
+        </p>
+        {event.organizer.partner && <p class="mt-2 text-small text-on-dark-muted">Didukung {event.organizer.partner}.</p>}
+      </div>
+
+      <nav aria-label="Navigasi footer" class="sm:col-span-6 lg:col-span-2 lg:col-start-7">
+        <h3 class="text-label font-semibold tracking-wide text-on-dark-muted uppercase">Navigasi</h3>
+        <ul class="mt-3">
+          {
+            footerNav.map((n) => (
+              <li>
+                <a href={n.href} class="link inline-flex min-h-11 items-center">
+                  {n.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="sm:col-span-6 sm:col-start-7 lg:col-span-3 lg:col-start-10">
+        <h3 class="text-label font-semibold tracking-wide text-on-dark-muted uppercase">Kontak</h3>
+        <ul class="mt-3">
+          {
+            contacts.map((c) => (
+              <li>
+                <a
+                  href={c.href}
+                  {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  class="link inline-flex min-h-11 items-center gap-1.5"
+                >
+                  {c.label}
+                  {c.external && <ArrowUpRight size={16} aria-hidden="true" />}
+                </a>
+              </li>
+            ))
+          }
+          {
+            socials.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" class="link inline-flex min-h-11 items-center gap-1.5">
+                  {s.label}
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                  <span class="sr-only">(membuka tab baru)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        {
+          contacts.length === 0 && (
+            <p class="mt-2 text-small text-on-dark-muted">
+              Narahubung panitia: <span class="font-semibold text-peach">{TBA}</span>
+            </p>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col gap-4 border-t border-line-dark pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-small text-on-dark-muted">
+        © {year} {event.name} · Prodi {event.organizer.studyProgram}, {event.organizer.institution}
+      </p>
+      <div class="barcode h-5 w-40 text-peach/50" aria-hidden="true"></div>
+    </div>
+    </div>
+  </div>
+</footer>

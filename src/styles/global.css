@@ -1,0 +1,442 @@
+@import 'tailwindcss';
+
+/* Font self-hosted (Fontsource): tanpa request ke Google, font-display: swap. */
+@import '@fontsource-variable/oswald/wght.css';
+@import '@fontsource-variable/manrope/wght.css';
+
+/* ============================================================================
+   DESIGN TOKENS — Digital Canvas
+   Diturunkan dari sampul Guide Book: teal sebagai ground, peach sebagai aksen,
+   off-white hangat untuk teks di atas teal dan untuk ground terang.
+   ========================================================================== */
+@theme {
+  /* Warna brand */
+  --color-teal: #168d96; /* Primary Teal: ground hero bagian terang */
+  --color-teal-deep: #126878; /* Deep Teal: ground utama gelap, aksen di atas terang */
+  --color-ocean: #0d5666; /* Dark Ocean: nav, section paling gelap */
+  --color-abyss: #0a4352; /* footer, satu tingkat di bawah ocean */
+  --color-ink: #0d3f4a; /* teks utama di ground terang (12:1 di paper) */
+  --color-peach: #f0bca5; /* Soft Peach: aksen, CTA, teks besar di teal */
+  --color-peach-soft: #f6d3c2; /* hover CTA */
+  --color-paper: #f8f4ec; /* Warm Off-White: ground terang & teks di teal */
+  --color-surface: #efe6d8; /* ground terang kedua */
+  --color-mist: #89b6bc; /* Muted Teal: garis & dekorasi (bukan untuk teks kecil) */
+  --color-muted: #496a70; /* teks sekunder di paper (5.6:1) */
+  --color-on-dark-muted: #cfe3e3; /* teks sekunder di teal-deep/ocean (≥4.8:1) */
+  --color-line: rgb(13 63 74 / 0.16); /* hairline di ground terang */
+  --color-line-dark: rgb(248 244 236 / 0.22); /* hairline di ground gelap */
+
+  /* Tipografi */
+  --font-display: 'Oswald Variable', 'Oswald', 'Arial Narrow', sans-serif;
+  --font-sans: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+
+  /* Skala teks (mobile → desktop lewat clamp) */
+  --text-label: 0.8125rem; /* 13px */
+  --text-label--line-height: 1.25;
+  --text-small: 0.875rem; /* 14px */
+  --text-small--line-height: 1.45;
+  --text-body: 1rem; /* 16px */
+  --text-body--line-height: 1.65;
+  --text-lead: clamp(1.0625rem, 0.95rem + 0.35vw, 1.25rem); /* 17 → 20 */
+  --text-lead--line-height: 1.55;
+  --text-h3: clamp(1.375rem, 1.15rem + 0.7vw, 1.75rem); /* 22 → 28 */
+  --text-h3--line-height: 1.15;
+  --text-h2: clamp(2.25rem, 1.6rem + 2.4vw, 4rem); /* 36 → 64 */
+  --text-h2--line-height: 1;
+  --text-statement: clamp(1.875rem, 1.2rem + 2.6vw, 3.5rem); /* 30 → 56 */
+  --text-statement--line-height: 1.12;
+
+  /* Radius: "sharp" — poster cetak, bukan kartu membulat */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+
+  /* Bayangan: satu-satunya, offset cetak seperti bayangan huruf CANVAS */
+  --shadow-print: 10px 10px 0 0 var(--color-ocean);
+
+  /* Durasi & easing */
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --default-transition-duration: 180ms;
+
+  /* Breakpoint (default Tailwind: sm 640, md 768, lg 1024, xl 1280) */
+  --breakpoint-xs: 390px;
+}
+
+/* Token ritme layout (mengikuti Taste: nav, padding section, gutter) */
+:root {
+  --nav: 56px;
+  --gut: 24px;
+  --padt: 96px;
+  --padb: 48px;
+  --wrap: 1280px;
+  --dur-fast: 150ms;
+  --dur-base: 240ms;
+  --dur-enter: 700ms;
+  color-scheme: light;
+  /* Alias token untuk moment kit Taste (public/assets/moments/word-highlight/moment.css). */
+  --ink: var(--color-ink);
+  --bg: var(--color-paper);
+  --accent: var(--color-teal-deep);
+  --display-weight: 500;
+  --display-tracking: 0;
+}
+@media (min-width: 640px) {
+  :root {
+    --gut: 48px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --nav: 72px;
+    --gut: 80px;
+    --padt: 120px;
+    --padb: 72px;
+  }
+}
+
+/* ============================================================================
+   BASE
+   ========================================================================== */
+@layer base {
+  html {
+    scroll-padding-top: var(--nav);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-peach);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-teal-deep);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-peach);
+  }
+  a,
+  button,
+  summary {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   KOMPONEN & UTILITAS
+   ========================================================================== */
+@layer components {
+  /* Satu container untuk header, semua section, dan footer: tepi kiri-kanan sama. */
+  .wrap {
+    width: min(100% - 2 * var(--gut), var(--wrap));
+    margin-inline: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Section: satu atau dua layar (--h), h2 di atas, padding seragam. */
+  .section {
+    position: relative;
+    min-height: calc(var(--h, 1) * 100svh);
+    padding-top: var(--padt);
+    padding-bottom: var(--padb);
+  }
+  @media (max-width: 1023px) {
+    .section {
+      min-height: calc(var(--hm, var(--h, 1)) * 100svh);
+    }
+  }
+
+  /* Label section: Oswald kapital kecil, gaya label cetak di sampul. */
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+
+  .h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Tombol: satu bentuk, dua peran ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 48px;
+    padding: 0 1.5rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition:
+      transform var(--dur-fast) var(--ease-out-soft),
+      background-color var(--dur-fast) ease,
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease;
+  }
+  .btn svg {
+    flex: none;
+    transition: transform var(--dur-base) var(--ease-out-soft);
+  }
+  @media (hover: hover) {
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .btn:hover svg {
+      transform: translate(2px, -2px);
+    }
+  }
+  .btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+  /* Primer: peach di atas teal (teks ink 6.6:1) */
+  .btn--primary {
+    background: var(--color-peach);
+    color: var(--color-ink);
+  }
+  .btn--primary:hover {
+    background: var(--color-peach-soft);
+  }
+  /* Primer di ground terang: teal-deep, teks paper (6.3:1) */
+  .btn--primary-light {
+    background: var(--color-teal-deep);
+    color: var(--color-paper);
+  }
+  .btn--primary-light:hover {
+    background: var(--color-ocean);
+  }
+  /* Sekunder: garis, mengikuti warna teks */
+  .btn--secondary {
+    background: transparent;
+    color: inherit;
+    border-color: currentColor;
+  }
+  .btn--secondary:hover {
+    background: rgb(248 244 236 / 0.1);
+  }
+  .on-light .btn--secondary:hover {
+    background: rgb(13 63 74 / 0.06);
+  }
+  /* Nonaktif: formulir belum dibuka */
+  .btn[aria-disabled='true'] {
+    cursor: not-allowed;
+    background: transparent;
+    border-style: dashed;
+    border-color: currentColor;
+    color: inherit;
+    opacity: 0.85;
+    transform: none;
+  }
+
+  /* ---------- Tautan teks: garis bawah tergambar saat hover ---------- */
+  .link {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size var(--dur-base) var(--ease-out-soft);
+    padding-bottom: 2px;
+  }
+  .link:hover,
+  .link:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* ---------- Grain: tekstur cetak halus di ground teal ---------- */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.1;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Barcode: strip dari kaki sampul ---------- */
+  .barcode {
+    height: 28px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      currentColor 0 2px,
+      transparent 2px 5px,
+      currentColor 5px 6px,
+      transparent 6px 9px,
+      currentColor 9px 12px,
+      transparent 12px 14px,
+      currentColor 14px 15px,
+      transparent 15px 19px
+    );
+  }
+
+  /* ---------- Bingkai tipis bergerigi (seperti bingkai judul di sampul) ---------- */
+  .rough-frame {
+    position: absolute;
+    border: 2px solid rgb(248 244 236 / 0.55);
+    filter: url(#rough-edge);
+    pointer-events: none;
+  }
+}
+
+/* ============================================================================
+   HERO — judul poster
+   ========================================================================== */
+@layer components {
+  .hero-ground {
+    background:
+      radial-gradient(60% 45% at 30% 108%, rgb(160 178 172 / 0.12) 0%, transparent 60%),
+      linear-gradient(200deg, var(--color-teal-deep) 0%, var(--color-ocean) 100%);
+  }
+  /* Sorotan teal terang hanya di desktop: kanan atas hero kosong dari teks kecil. */
+  @media (min-width: 1024px) {
+    .hero-ground {
+      background:
+        radial-gradient(60% 50% at 100% 0%, rgb(137 182 188 / 0.22) 0%, transparent 60%),
+        radial-gradient(60% 45% at 30% 108%, rgb(160 178 172 / 0.12) 0%, transparent 60%),
+        linear-gradient(200deg, var(--color-teal) 0%, var(--color-teal-deep) 38%, var(--color-ocean) 100%);
+    }
+  }
+
+  .poster-title {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    line-height: 0.8;
+    /* Ukuran mengikuti lebar dan tinggi layar agar hero selalu satu layar. */
+    font-size: min(21.5vw, 17svh, 13.5rem);
+  }
+  @media (min-width: 1024px) {
+    .poster-title {
+      font-size: min(13.4vw, 24svh, 13rem);
+    }
+  }
+  .poster-title__digital {
+    display: block;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    color: var(--color-paper);
+  }
+  /* CANVAS: peach berbintik (mask noise) dengan bayangan cetak gelap. */
+  .poster-title__canvas {
+    position: relative;
+    display: block;
+    margin-top: -0.09em;
+    margin-left: 0.32em;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-peach);
+  }
+  .poster-title__canvas > span {
+    position: relative;
+    z-index: 1;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -9 6.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -9 6.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  }
+  .poster-title__canvas::before {
+    content: attr(data-text);
+    content: attr(data-text) / ''; /* tidak dibaca ulang oleh pembaca layar */
+    position: absolute;
+    inset: 0;
+    transform: translate(0.035em, 0.045em);
+    color: var(--color-ocean);
+    opacity: 0.75;
+    z-index: 0;
+  }
+}
+
+/* ============================================================================
+   MOTION
+   - Hero masuk sekali saat load (data-enter).
+   - word-highlight di section About (moment Taste, digerakkan main.ts).
+   - Hover kecil di tombol, tautan, gambar.
+   Semua diam pada prefers-reduced-motion.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-enter] .hero-text > * {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: enter var(--dur-enter) var(--ease-out-soft) forwards;
+    animation-delay: calc(var(--i, 0) * 90ms + 80ms);
+  }
+  @keyframes enter {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* word-highlight (kit Taste): kata yang belum menyala tetap ≥ 4.5:1 agar terbaca. */
+html .mo-wh .mo-w {
+  color: color-mix(in oklab, var(--ink) 68%, var(--bg));
+}
+html .mo-wh .mo-w.is-on {
+  color: var(--ink);
+}
+html .mo-wh strong .mo-w.is-on {
+  color: var(--accent);
+}
+
+/* Gambar dalam bingkai: zoom halus saat hover. */
+.zoom-frame {
+  overflow: hidden;
+}
+.zoom-frame img {
+  transition: transform 600ms var(--ease-out-soft);
+}
+@media (hover: hover) {
+  .zoom-frame:hover img {
+    transform: scale(1.025);
+  }
+}

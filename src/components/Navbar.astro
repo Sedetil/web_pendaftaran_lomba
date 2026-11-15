@@ -1,0 +1,94 @@
+---
+import { ArrowUpRight, Menu, X } from '@lucide/astro';
+import Logo from './Logo.astro';
+import { nav, primaryCta } from '../config/site';
+import { event } from '../data/event';
+import { primaryTarget } from '../utils/event-helpers';
+
+const cta = primaryTarget(event);
+const ext = cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+<header class="nav on-dark fixed inset-x-0 top-0 z-50 h-(--nav) border-b border-line-dark bg-ocean text-paper">
+  <div class="wrap flex h-full items-center justify-between gap-6">
+    <a
+      href="#main"
+      class="sr-only rounded-sm bg-peach px-4 py-3 font-semibold text-ink focus:not-sr-only focus:absolute focus:top-2 focus:left-0 focus:z-60"
+      >Lewati ke konten</a
+    >
+    <a href="#home" class="flex min-h-11 items-center" aria-label={`${event.name}, ke awal halaman`}>
+      <Logo />
+    </a>
+
+    <nav aria-label="Navigasi utama" class="hidden lg:block">
+      <ul class="flex items-center gap-8">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="link inline-flex min-h-11 items-center text-[0.9375rem] font-medium whitespace-nowrap"
+                data-nav-link
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href={cta.href} {...ext} class="btn btn--primary hidden sm:inline-flex" data-cta="nav">
+        {primaryCta}
+        {cta.external && <ArrowUpRight size={18} aria-hidden="true" />}
+        {cta.external && <span class="sr-only">(membuka tab baru)</span>}
+      </a>
+      <button
+        type="button"
+        class="btn btn--secondary min-h-11 w-11 px-0 lg:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Buka menu"
+        data-menu-toggle
+      >
+        <Menu size={20} aria-hidden="true" data-icon-open />
+        <X size={20} aria-hidden="true" data-icon-close class="hidden" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Menu layar penuh untuk tablet & ponsel -->
+  <div
+    id="mobile-menu"
+    class="grain fixed inset-x-0 top-(--nav) bottom-0 overflow-y-auto bg-ocean lg:hidden"
+    hidden
+    data-menu
+  >
+    <nav aria-label="Navigasi seluler" class="wrap flex min-h-full flex-col pt-6 pb-10">
+      <ul class="border-t border-line-dark">
+        {
+          nav.map((item, i) => (
+            <li class="border-b border-line-dark">
+              <a
+                href={item.href}
+                class="flex min-h-16 items-center justify-between font-display text-3xl font-medium uppercase"
+                data-menu-link
+              >
+                {item.label}
+                <span class="font-display text-sm text-on-dark-muted" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={cta.href} {...ext} class="btn btn--primary mt-8 w-full sm:hidden" data-menu-link>
+        {primaryCta}
+        {cta.external && <ArrowUpRight size={18} aria-hidden="true" />}
+      </a>
+      <div class="mt-auto pt-10" aria-hidden="true"><div class="barcode text-peach/60"></div></div>
+    </nav>
+  </div>
+</header>

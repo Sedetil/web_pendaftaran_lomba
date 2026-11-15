@@ -1,0 +1,90 @@
+---
+import { ArrowUpRight, ArrowDown } from '@lucide/astro';
+import { event } from '../data/event';
+import { primaryCta } from '../config/site';
+import { TBA, formatRangeShort, primaryTarget } from '../utils/event-helpers';
+
+const cta = primaryTarget(event);
+const ext = cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+
+const reg = event.registration;
+const facts = [
+  { label: 'Pendaftaran', value: formatRangeShort(reg.open, reg.close) },
+  { label: 'Biaya', value: reg.fee },
+  { label: 'Peserta', value: 'SMK se-Lampung' },
+  { label: 'Babak final', value: event.venue },
+];
+
+// Tagline dipatah seperti sampul: "Build Skills, Challenge Ideas," / "Present Solutions & Collaboration".
+const taglineParts = event.tagline.split(/(?<=Ideas,)\s/);
+---
+
+<section id="home" class="hero on-dark hero-ground grain relative isolate overflow-hidden text-paper" aria-labelledby="hero-title" data-enter>
+  <div class="wrap">
+    <div
+      class="hero-text relative flex min-h-svh flex-col pt-[calc(var(--nav)+16px)] pb-12 [@media(max-width:639px)_and_(max-height:820px)]:pb-10 lg:pt-[calc(var(--nav)+48px)] lg:pb-16"
+    >
+      <!-- Baris identitas penyelenggara (seperti kepala sampul) -->
+      <p class="flex flex-wrap gap-x-2 text-small font-medium" style="--i:0">
+        <span class="w-full whitespace-nowrap sm:w-auto">{event.organizer.institution}</span>
+        <span aria-hidden="true" class="hidden sm:inline">·</span>
+        <span class="w-full whitespace-nowrap sm:w-auto [@media(max-width:639px)_and_(max-height:820px)]:hidden">{event.organizer.department}</span>
+        <span aria-hidden="true" class="hidden sm:inline">·</span>
+        <span class="w-full whitespace-nowrap sm:w-auto">{event.organizer.studyProgram}</span>
+      </p>
+
+      <!-- Judul poster: nama acara + identitas acara -->
+      <h1 id="hero-title" class="mt-5 grid gap-y-4 [@media(max-width:639px)_and_(max-height:820px)]:mt-4 [@media(max-width:639px)_and_(max-height:820px)]:gap-y-3 sm:gap-y-5 lg:mt-8 lg:grid-cols-12 lg:items-start lg:gap-x-6" style="--i:1">
+        <span class="poster-title relative block pt-[0.1em] lg:col-span-7">
+          <span class="rough-frame top-0 left-0 h-[1.48em] w-[min(100%,3.82em)]" aria-hidden="true"></span>
+          <span class="poster-title__digital">Digital</span>
+          <span class="poster-title__canvas" data-text="Canvas"><span>Canvas</span></span>
+        </span>
+        <span class="flex flex-col items-start gap-1.5 font-display leading-none lg:col-span-5 lg:col-start-8">
+          <span class="text-[clamp(1.25rem,0.9rem+1.2vw,1.875rem)] font-medium">Software Engineering</span>
+          <span class="text-[clamp(2.75rem,1rem+5vw,5.25rem)] font-bold uppercase">Competition</span>
+          <span class="text-[clamp(1.25rem,0.9rem+1.2vw,2.25rem)] font-medium">{event.series}</span>
+        </span>
+      </h1>
+
+      <!-- Kaki hero: tagline, deskripsi, tombol | fakta -->
+      <div class="mt-auto grid gap-y-6 pt-6 [@media(max-width:639px)_and_(max-height:820px)]:gap-y-5 [@media(max-width:639px)_and_(max-height:820px)]:pt-5 sm:gap-y-8 sm:pt-8 lg:grid-cols-12 lg:items-start lg:gap-x-6 lg:pt-10" style="--i:2">
+        <div class="lg:col-span-7">
+          <p class="font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.375rem)] leading-[1.08] font-semibold text-peach">
+            {
+              taglineParts.map((part, i) => (
+                <span class="lg:block">
+                  {part}
+                  {i < taglineParts.length - 1 ? ' ' : ''}
+                </span>
+              ))
+            }
+          </p>
+          <p class="mt-4 hidden max-w-[58ch] text-lead sm:block lg:[@media(max-height:820px)]:hidden">{event.description}</p>
+          <div class="mt-6 flex flex-col gap-3 [@media(max-width:639px)_and_(max-height:820px)]:mt-5 sm:mt-7 sm:flex-row">
+            <a href={cta.href} {...ext} class="btn btn--primary" data-cta="hero">
+              {primaryCta}
+              {cta.external ? <ArrowUpRight size={18} aria-hidden="true" /> : <ArrowDown size={18} aria-hidden="true" />}
+              {cta.external && <span class="sr-only">(membuka tab baru)</span>}
+            </a>
+            <a href="#timeline" class="btn btn--secondary">Lihat Timeline</a>
+          </div>
+        </div>
+
+        <dl class="grid grid-cols-2 gap-x-3 lg:col-span-5 lg:col-start-8 lg:grid-cols-1">
+          {
+            facts.map((f) => (
+              <div class="flex flex-col gap-1 border-t border-line-dark py-2.5 [@media(max-width:639px)_and_(max-height:820px)]:py-2 lg:flex-row lg:items-baseline lg:justify-between lg:gap-4 lg:py-3">
+                <dt class="text-label font-medium tracking-wide text-on-dark-muted uppercase">{f.label}</dt>
+                <dd class="text-small leading-snug font-semibold text-balance lg:text-right">{f.value ?? TBA}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <!-- Strip barcode dari kaki sampul -->
+      <div class="barcode absolute inset-x-0 bottom-5 h-2.5 text-peach/45 lg:bottom-6 lg:h-4" aria-hidden="true" style="--i:3"></div>
+    </div>
+  </div>
+</section>

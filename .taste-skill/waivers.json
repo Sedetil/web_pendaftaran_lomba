@@ -1,0 +1,27 @@
+[
+  {
+    "check": "overlap-text",
+    "target": "span.poster-title__canvas",
+    "reason": "Brief section 16E requires creative typography layering with controlled overlaps: CANVAS overlapping DIGITAL reproduces the Digital Canvas guidebook cover; both words stay legible and the h1 reads as one heading."
+  },
+  {
+    "check": "stagger",
+    "target": "h1#hero-title",
+    "reason": "Poster composition from the guidebook cover: the event name (DIGITAL CANVAS) and the event identity (Software Engineering BOOTCAMP & Competition) are two blocks of one h1, set on the two shared split lines (x 80 and 841), not a zigzag sentence."
+  },
+  {
+    "check": "copy-fact",
+    "target": "h1#hero-title",
+    "reason": "The organizer has not given a date, venue or number yet; the brief forbids inventing event details. The first screen shows the organizer (Politeknik Negeri Lampung) and marks date and venue as not yet announced; the fact fills automatically from src/data/event.ts."
+  },
+  {
+    "check": "copy-headings",
+    "target": "li.group.relative:nth-of-type(1) > h3",
+    "reason": "Indonesian page: Pendaftaran (registration), Persyaratan peserta (participant requirements), Cara mendaftar (how to register) are section nouns; the English-tuned heuristic does not read them."
+  },
+  {
+    "check": "no-visual",
+    "target": "section#timeline",
+    "reason": "No event photographs exist yet and the brief forbids fabricated material; the timeline is a schedule list (like a specs list) carried by large outline numerals and stage icons. The client's only visual asset, the guidebook cover, is already shown in About."
+  }
+]
