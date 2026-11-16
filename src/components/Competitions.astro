@@ -1,7 +1,7 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import { FileText, MousePointerClick, CodeXml, Palette, Clapperboard, Users, Flag } from '@lucide/astro';
+import { FileText, MousePointerClick, CodeXml, Palette, Clapperboard, Users, Flag, MessageCircle } from '@lucide/astro';
 import { event } from '../data/event';
 
 // Ikon per cabang lomba (berdasarkan id di event.ts).
@@ -54,7 +54,7 @@ const items = event.competitions.map((c, i) => ({
 
             <div class="md:col-span-5">
               <p class="max-w-[52ch]">{c.summary}</p>
-              <ul class="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-small text-muted">
+              <ul class="mt-2.5 flex flex-wrap gap-x-5 gap-y-1.5 text-small text-muted">
                 <li class="inline-flex items-start gap-1.5">
                   <Users size={15} aria-hidden="true" class="mt-[3px] shrink-0" />
                   {c.team}
@@ -63,6 +63,14 @@ const items = event.competitions.map((c, i) => ({
                   <Flag size={15} aria-hidden="true" class="mt-[3px] shrink-0" />
                   {c.rounds}
                 </li>
+                {c.contact && (
+                  <li class="inline-flex items-start gap-1.5">
+                    <MessageCircle size={15} aria-hidden="true" class="mt-[3px] shrink-0 text-teal-deep" />
+                    <span>
+                      Narahubung: <a href={c.contact.whatsapp} target="_blank" rel="noopener noreferrer" class="font-medium text-ink underline underline-offset-2 hover:text-teal-deep" title={`Hubungi WhatsApp ${c.contact.name}`}>{c.contact.name} ({c.contact.phone})</a>
+                    </span>
+                  </li>
+                )}
               </ul>
             </div>
 
@@ -79,7 +87,24 @@ const items = event.competitions.map((c, i) => ({
                 {c.size && <span class="text-small font-normal opacity-75 md:hidden">· PDF {c.size}</span>}
                 <span class="sr-only">{`${c.name} (PDF, membuka tab baru)`}</span>
               </a>
-              {c.size && <span class="hidden text-label text-muted md:inline">PDF · {c.size}</span>}
+              <div class="flex flex-wrap items-center gap-x-2 text-label text-muted">
+                {c.size && <span>PDF · {c.size}</span>}
+                {c.contact && (
+                  <>
+                    <span aria-hidden="true" class="hidden md:inline">·</span>
+                    <a
+                      href={c.contact.whatsapp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="hidden font-medium text-teal-deep hover:underline md:inline-flex items-center gap-1"
+                      title={`Hubungi WhatsApp ${c.contact.name}`}
+                    >
+                      <MessageCircle size={13} aria-hidden="true" />
+                      CP: {c.contact.name}
+                    </a>
+                  </>
+                )}
+              </div>
             </div>
           </li>
         ))

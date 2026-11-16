@@ -10,6 +10,11 @@ const ext = cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
 const year = new Date().getFullYear();
 
 const contacts = [
+  ...event.competitions.map((c) => ({
+    label: `CP ${c.name}: ${c.contact.name}`,
+    href: c.contact.whatsapp,
+    external: true,
+  })),
   event.contact.whatsapp && {
     label: `WhatsApp${event.contact.name ? ` (${event.contact.name})` : ''}`,
     href: `https://wa.me/${event.contact.whatsapp.replace(/\D/g, '')}`,

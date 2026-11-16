@@ -50,6 +50,12 @@ export interface TimelineItem {
   status?: TimelineStatus;
 }
 
+export interface CompetitionContact {
+  name: string;
+  phone: string;
+  whatsapp: string;
+}
+
 /** Satu cabang lomba. */
 export interface Competition {
   /** Kunci unik, dipakai sebagai id anchor (#lomba-<id>). */
@@ -63,6 +69,12 @@ export interface Competition {
   rounds: string;
   /** Path PDF guidebook di folder public, mis. "/guidebook/guidebook-uiux.pdf". */
   guidebook: string;
+  /** Narahubung cabang lomba dari guidebook. */
+  contact: CompetitionContact;
+  /** URL formulir pendaftaran dari guidebook. */
+  formUrl: string;
+  /** URL pengumpulan karya (bila terpisah dari pendaftaran). */
+  submissionUrl?: string;
 }
 
 export interface FaqItem {
@@ -157,8 +169,8 @@ export const event: EventConfig = {
   description:
     'Lomba UI/UX Design, Web Design, Poster Design, dan Short Reels untuk siswa SMK se-Lampung dalam rangkaian EXPO TRPL 2026. Pendaftaran gratis, dibuka sampai 3 Desember 2026.',
 
-  dateStart: null, // TODO(panitia): tanggal babak final (Short Reels dijadwalkan 10 Desember 2026)
-  dateEnd: null,
+  dateStart: '2026-12-10', // Babak final di SMK Negeri 8 Bandar Lampung
+  dateEnd: '2026-12-10',
   venue: 'SMK Negeri 8 Bandar Lampung', // lokasi babak final (guidebook)
   city: 'Bandar Lampung',
   mode: 'Penyisihan daring, final luring',
@@ -188,6 +200,12 @@ export const event: EventConfig = {
       team: 'Tim 3 orang',
       rounds: 'Penyisihan daring (proposal PDF + tautan Figma), final luring 5 tim',
       guidebook: '/guidebook/guidebook-uiux.pdf',
+      contact: {
+        name: 'Zidan',
+        phone: '0838-7032-1697',
+        whatsapp: 'https://wa.me/6283870321697',
+      },
+      formUrl: 'https://forms.gle/djkh6WE8E64StRPK7',
     },
     {
       id: 'web',
@@ -197,6 +215,12 @@ export const event: EventConfig = {
       team: 'Tim 3 orang',
       rounds: 'Penyisihan daring (tautan website, repositori, proposal), final luring',
       guidebook: '/guidebook/guidebook-web-design.pdf',
+      contact: {
+        name: 'Abi Bakri',
+        phone: '0857-8889-2750',
+        whatsapp: 'https://wa.me/6285788892750',
+      },
+      formUrl: 'https://forms.gle/y4BSb96stmLQEWUa7',
     },
     {
       id: 'poster',
@@ -206,6 +230,13 @@ export const event: EventConfig = {
       team: 'Perorangan',
       rounds: 'Penyisihan daring (poster + deskripsi), final luring 5 finalis',
       guidebook: '/guidebook/guidebook-poster-design.pdf',
+      contact: {
+        name: 'Kayla',
+        phone: '0897-9076-918',
+        whatsapp: 'https://wa.me/628979076918',
+      },
+      formUrl: 'https://forms.gle/M4aUQdznPRGxFoDD7',
+      submissionUrl: 'https://forms.gle/vEso6USf8JwV8wFt7',
     },
     {
       id: 'reels',
@@ -215,6 +246,14 @@ export const event: EventConfig = {
       team: 'Perorangan',
       rounds: 'Langsung di lokasi, 10 Desember 2026',
       guidebook: '/guidebook/guidebook-short-reels.pdf',
+      contact: {
+        name: 'Aldefina',
+        phone: '0896-9192-3252',
+        whatsapp: 'https://wa.me/6289691923252',
+      },
+      formUrl:
+        'https://docs.google.com/forms/d/e/1FAIpQLSefmTot_xw6nEUq5hSxqWE6A8cgM-5FZaCbBT-B9rfPkOpMBQ/viewform',
+      submissionUrl: 'https://forms.gle/iqou5F7XtJWAiPTa7',
     },
   ],
 
@@ -224,53 +263,55 @@ export const event: EventConfig = {
     fee: 'Gratis',
     requirements: [
       'Siswa/i aktif SMK se-Lampung, dibuktikan dengan kartu pelajar atau surat keterangan siswa aktif.',
+      'Melampirkan Surat Pernyataan Keaslian Karya yang telah diisi dan ditandatangani perwakilan tim serta kepala sekolah.',
       'Setiap peserta hanya boleh terdaftar di 1 tim dan 1 cabang lomba.',
       'UI/UX Design dan Web Design: tim 3 orang dari sekolah yang sama, dengan 1 ketua tim.',
       'Poster Design dan Short Reels: perorangan.',
       'Setiap sekolah boleh mengirim peserta tanpa batas jumlah.',
     ],
     steps: [
-      'Pilih cabang lomba dan baca guidebook-nya.',
-      'Siapkan kartu pelajar atau surat keterangan siswa aktif.',
-      'Isi Google Form pendaftaran lomba dan kirim sebelum 3 Desember 2026.',
+      'Pilih cabang lomba yang ingin kamu ikuti pada bagian Cabang Lomba.',
+      'Unduh dan baca guidebook cabang lomba terkait. Link pendaftaran dan pengumpulan karya tertera di dalamnya.',
+      'Siapkan kartu pelajar/surat aktif dan unduh serta lengkapi Surat Pernyataan Keaslian Karya.',
+      'Buka formulir pendaftaran melalui tautan di dalam guidebook dan kirim karya sebelum batas akhir 3 Desember 2026.',
     ],
-    formUrl: null, // TODO(panitia): URL Google Form pendaftaran lomba (competition)
+    formUrl: null, // Note: Link pendaftaran & pengumpulan tertera di guidebook masing-masing cabang lomba.
   },
 
-  // Sumber: tabel "Timeline Bootcamp dan Lomba" dari panitia.
+  // Timeline resmi dari panitia & guidebook kompetisi Digital Canvas.
   timeline: [
     {
-      title: 'Pendaftaran',
-      description: 'Peserta mendaftar lewat Google Form pendaftaran lomba.',
+      title: 'Pendaftaran & Pengumpulan',
+      description: 'Pendaftaran peserta dan pengumpulan karya dibuka bersamaan lewat tautan di guidebook tiap cabang.',
       start: '2026-11-16',
       end: '2026-12-03',
       time: null,
     },
     {
-      title: 'Pengumpulan karya',
-      description: 'Batas pengumpulan karya UI/UX Design, Web Design, dan Poster Design.',
-      start: '2026-12-03',
-      end: null,
-      time: null,
-    },
-    {
-      title: 'Penyisihan',
-      description: 'Juri menilai karya peserta pada babak penyisihan.',
+      title: 'Penjurian Penyisihan',
+      description: 'Dewan juri menilai berkas, portofolio, dan karya babak penyisihan secara daring.',
       start: '2026-12-04',
       end: null,
       time: null,
     },
     {
-      title: 'Pengumuman finalis',
-      description: 'Panitia mengumumkan peserta yang lolos ke babak final.',
+      title: 'Pengumuman Finalis',
+      description: 'Panitia mengumumkan finalis yang lolos ke babak final tatap muka.',
       start: '2026-12-07',
       end: null,
       time: null,
     },
     {
-      title: 'Technical meeting',
-      description: 'Pertemuan teknis antara panitia dan peserta.',
+      title: 'Technical Meeting',
+      description: 'Pertemuan teknis antara panitia dan finalis menjelang hari pelaksanaan.',
       start: '2026-12-09',
+      end: null,
+      time: null,
+    },
+    {
+      title: 'Babak Final & Pameran',
+      description: 'Presentasi karya dan pelaksanaan lomba tatap muka di SMK Negeri 8 Bandar Lampung.',
+      start: '2026-12-10',
       end: null,
       time: null,
     },
@@ -295,10 +336,14 @@ export const event: EventConfig = {
       answer: 'Di guidebook masing-masing cabang lomba. Buka lewat tombol Lihat guidebook di bagian Lomba.',
     },
     {
-      question: 'Tombol pendaftaran belum bisa ditekan. Kenapa?',
+      question: 'Di mana link pendaftaran dan pengumpulan karya?',
       answer:
-        'Formulir belum dibuka. Tombol aktif otomatis saat panitia membuka pendaftaran; pengumumannya juga dibagikan lewat Instagram panitia.',
-      onlyWhileFormClosed: true,
+        'Semua link pendaftaran dan pengumpulan tertera langsung di dalam masing-masing guidebook cabang lomba. Silakan unduh guidebook di bagian Cabang Lomba.',
+    },
+    {
+      question: 'Di mana mengunduh format Surat Pernyataan Keaslian Karya?',
+      answer:
+        'Format Surat Pernyataan Keaslian Karya (.docx) dapat diunduh langsung lewat tombol unduh di bagian Pendaftaran Peserta.',
     },
   ],
 
@@ -310,9 +355,9 @@ export const event: EventConfig = {
   },
 
   contact: {
-    name: null, // TODO(panitia): nama narahubung
-    whatsapp: null, // TODO(panitia): nomor WhatsApp narahubung, mis. '6281234567890'
-    email: null, // TODO(panitia): email panitia
+    name: 'Panitia Digital Canvas',
+    whatsapp: null, // WhatsApp Panitia (Zidan)
+    email: null,
   },
 
   socials: [

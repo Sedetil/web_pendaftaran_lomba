@@ -139,7 +139,7 @@ export function missingFields(e: EventConfig): string[] {
   const need = (cond: unknown, label: string) => {
     if (cond === null || cond === undefined || (Array.isArray(cond) && cond.length === 0)) miss.push(label);
   };
-  if (!isValidFormUrl(e.registration.formUrl)) miss.push('URL Google Form pendaftaran lomba (registration.formUrl)');
+  // Link pendaftaran tertera di guidebook masing-masing cabang lomba (e.registration.formUrl opsional)
   need(e.dateStart, 'Tanggal babak final (dateStart)');
   need(e.registration.open, 'Tanggal pendaftaran dibuka (registration.open)');
   need(e.registration.close, 'Batas akhir pendaftaran (registration.close)');

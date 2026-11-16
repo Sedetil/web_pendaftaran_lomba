@@ -1,17 +1,31 @@
 ---
-import { ArrowUpRight, CalendarClock, CalendarX2, Wallet, Lock } from '@lucide/astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import { CalendarClock, CalendarX2, Wallet, FileDown } from '@lucide/astro';
 import { event } from '../data/event';
-import { TBA, formatDate, formatRange, isValidFormUrl } from '../utils/event-helpers';
+import { TBA, formatDate, formatRange } from '../utils/event-helpers';
 
 const reg = event.registration;
 const period = reg.open && !reg.close ? `Mulai ${formatDate(reg.open)}` : formatRange(reg.open, reg.close);
 const info = [
-  { icon: CalendarClock, label: 'Periode pendaftaran', value: period },
+  { icon: CalendarClock, label: 'Pendaftaran & pengumpulan', value: period },
   { icon: CalendarX2, label: 'Batas akhir', value: formatDate(reg.close) },
   { icon: Wallet, label: 'Biaya', value: reg.fee },
 ];
-const formUrl = isValidFormUrl(reg.formUrl) ? reg.formUrl : null;
-const names = event.competitions.map((c) => c.name);
+
+const statementDocPath = '/dokumen/surat-pernyataan-keaslian-karya.docx';
+
+/** Ukuran berkas dokumen, dibaca saat build dari folder public/. */
+function docSize(publicPath: string): string {
+  try {
+    const bytes = fs.statSync(path.join(process.cwd(), 'public', publicPath)).size;
+    return `${Math.round(bytes / 1024)} KB`;
+  } catch {
+    return '18 KB';
+  }
+}
+
+const docBytes = docSize(statementDocPath);
 ---
 
 <section
@@ -24,8 +38,8 @@ const names = event.competitions.map((c) => c.name);
     <div class="md:col-span-6 lg:col-span-7">
       <p class="label text-on-dark-muted">Registration</p>
       <h2 id="registration-title" class="h2 mt-4">Pendaftaran <span class="text-peach">peserta</span></h2>
-      <p class="mt-5 max-w-[46ch] text-lead">
-        Satu formulir untuk semua cabang lomba. Pilih cabang lombamu, lalu isi Google Form sampai terkirim.
+      <p class="mt-5 max-w-[48ch] rounded-sm border-l-2 border-peach bg-paper/10 px-4 py-3 text-lead text-paper">
+        Semua link pendaftaran dan pengumpulan tertera di masing-masing guidebook cabang lomba.
       </p>
 
       <dl class="mt-6 max-w-[34rem] border-t border-line-dark sm:mt-8">
@@ -46,12 +60,32 @@ const names = event.competitions.map((c) => c.name);
       {
         reg.requirements.length ? (
           <ul class="mt-3 space-y-1.5 sm:space-y-2">
-            {reg.requirements.map((r) => (
-              <li class="flex gap-3">
-                <span class="mt-[0.75em] h-px w-4 shrink-0 bg-peach" aria-hidden="true" />
-                {r}
-              </li>
-            ))}
+            {reg.requirements.map((r) => {
+              const isSurat = r.includes('Surat Pernyataan Keaslian Karya');
+              return (
+                <li class="flex gap-3">
+                  <span class="mt-[0.75em] h-px w-4 shrink-0 bg-peach" aria-hidden="true" />
+                  <span>
+                    {isSurat ? (
+                      <>
+                        Melampirkan{' '}
+                        <a
+                          href={statementDocPath}
+                          download="SURAT PERNYATAAN KEASLIAN KARYA.docx"
+                          class="font-semibold text-peach underline underline-offset-4 hover:text-peach-soft"
+                          title="Unduh template Surat Pernyataan Keaslian Karya (.docx)"
+                        >
+                          Surat Pernyataan Keaslian Karya
+                        </a>{' '}
+                        yang telah diisi dan ditandatangani perwakilan tim serta kepala sekolah.
+                      </>
+                    ) : (
+                      r
+                    )}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p class="mt-3 max-w-[44ch]">
@@ -61,10 +95,10 @@ const names = event.competitions.map((c) => c.name);
       }
     </div>
 
-    <!-- Kanan: cara mendaftar + tiket formulir pendaftaran lomba -->
+    <!-- Kanan: cara mendaftar + tiket berkas pendaftaran lomba -->
     <div class="max-sm:self-end md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8">
       <h3 class="text-h3 font-semibold uppercase">Cara mendaftar</h3>
-      <ol class="mt-3 space-y-1.5">
+      <ol class="mt-3 space-y-2">
         {
           reg.steps.map((s, i) => (
             <li class="grid grid-cols-[2rem_1fr] items-baseline gap-1">
@@ -75,40 +109,46 @@ const names = event.competitions.map((c) => c.name);
         }
       </ol>
 
-      <ul class="mt-6 sm:mt-8" aria-label="Formulir pendaftaran">
-      <li id="daftar-lomba" class="grid overflow-hidden rounded-md bg-paper text-ink xl:grid-cols-[1fr_auto]">
-        <div class="px-5 py-4 sm:px-8 sm:py-6">
-          <p class="font-display text-small font-semibold text-teal-deep">{event.series}</p>
-          <h3 class="mt-2 font-display text-[clamp(1.75rem,1.2rem+1.6vw,2.875rem)] leading-[0.95] font-bold uppercase">
-            Competition
-          </h3>
-          <p class="mt-2 max-w-[40ch]">Formulir pendaftaran {names.slice(0, -1).join(', ')}, dan {names.at(-1)}.</p>
-          <div class="mt-5">
-            {formUrl ? (
-              <a href={formUrl} target="_blank" rel="noopener noreferrer" class="btn btn--primary-light w-full xl:w-auto" data-form-link>
-                Isi formulir pendaftaran
-                <ArrowUpRight size={18} aria-hidden="true" />
-                <span class="sr-only">(Google Form, membuka tab baru)</span>
-              </a>
-            ) : (
-              <span class="btn w-full text-muted xl:w-auto" aria-disabled="true">
-                <Lock size={16} aria-hidden="true" />
-                Formulir belum dibuka
+      <ul class="mt-6 sm:mt-8" aria-label="Berkas pendaftaran">
+        <li id="daftar-lomba" class="grid overflow-hidden rounded-md bg-paper text-ink xl:grid-cols-[1fr_auto]">
+          <div class="px-5 py-5 sm:px-8 sm:py-6">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <p class="font-display text-small font-semibold tracking-wide text-teal-deep uppercase">
+                {event.series}
+              </p>
+              <span class="inline-flex shrink-0 items-center rounded bg-teal-deep/10 px-2.5 py-0.5 text-label font-semibold text-teal-deep">
+                DOCX · {docBytes}
               </span>
-            )}
+            </div>
+            <h3 class="mt-2 font-display text-[clamp(1.75rem,1.2rem+1.6vw,2.5rem)] leading-[0.95] font-bold uppercase">
+              Surat Orisinil
+            </h3>
+            <p class="mt-2.5 max-w-[42ch] text-small text-muted leading-relaxed">
+              Surat Pernyataan Keaslian Karya wajib diisi, ditandatangani ketua tim dan kepala sekolah, lalu diunggah saat pengumpulan karya.
+            </p>
+            <div class="mt-5">
+              <a
+                href={statementDocPath}
+                download="SURAT PERNYATAAN KEASLIAN KARYA.docx"
+                class="btn btn--primary-light w-full xl:w-auto"
+                data-download-surat
+              >
+                <FileDown size={18} aria-hidden="true" />
+                Unduh Surat Orisinil (.docx)
+              </a>
+            </div>
           </div>
-        </div>
-        <!-- sobekan tiket -->
-        <div
-          class="relative hidden w-20 border-l-2 border-dashed border-ink/20 bg-surface xl:flex xl:items-center xl:justify-center"
-          aria-hidden="true"
-        >
-          <div class="barcode h-[64%] w-6 text-ink/70 [background-image:repeating-linear-gradient(0deg,currentColor_0_2px,transparent_2px_5px,currentColor_5px_6px,transparent_6px_9px,currentColor_9px_12px,transparent_12px_14px,currentColor_14px_15px,transparent_15px_19px)]"></div>
-        </div>
-      </li>
+          <!-- sobekan tiket -->
+          <div
+            class="relative hidden w-20 border-l-2 border-dashed border-ink/20 bg-surface xl:flex xl:items-center xl:justify-center"
+            aria-hidden="true"
+          >
+            <div class="barcode h-[64%] w-6 text-ink/70 [background-image:repeating-linear-gradient(0deg,currentColor_0_2px,transparent_2px_5px,currentColor_5px_6px,transparent_6px_9px,currentColor_9px_12px,transparent_12px_14px,currentColor_14px_15px,transparent_15px_19px)]"></div>
+          </div>
+        </li>
       </ul>
       <p class="mt-4 text-small text-on-dark-muted">
-        Formulir membuka Google Form resmi panitia di tab baru. Batas akhir {formatDate(reg.close)}.
+        Pendaftaran dan pengumpulan karya dibuka bersamaan (16 November – 3 Desember 2026) melalui link di tiap guidebook lomba.
       </p>
     </div>
   </div>
