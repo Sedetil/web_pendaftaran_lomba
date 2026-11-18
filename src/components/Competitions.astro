@@ -1,7 +1,7 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import { FileText, MousePointerClick, CodeXml, Palette, Clapperboard, Users, Flag, MessageCircle } from '@lucide/astro';
+import { FileText, MousePointerClick, CodeXml, Palette, Clapperboard, Users, Flag, MessageCircle, Wallet } from '@lucide/astro';
 import { event } from '../data/event';
 
 // Ikon per cabang lomba (berdasarkan id di event.ts).
@@ -62,6 +62,10 @@ const items = event.competitions.map((c, i) => ({
                 <li class="inline-flex items-start gap-1.5">
                   <Flag size={15} aria-hidden="true" class="mt-[3px] shrink-0" />
                   {c.rounds}
+                </li>
+                <li class="inline-flex items-start gap-1.5">
+                  <Wallet size={15} aria-hidden="true" class="mt-[3px] shrink-0 text-teal-deep" />
+                  <span class="font-medium text-ink">{c.fee}</span>
                 </li>
                 {c.contact && (
                   <li class="inline-flex items-start gap-1.5">

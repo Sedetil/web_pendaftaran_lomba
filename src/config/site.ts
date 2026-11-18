@@ -9,7 +9,7 @@ export const site = {
   locale: 'id_ID',
   title: `${event.name}: Lomba UI/UX, Web, Poster & Short Reels | ${event.series}`,
   description:
-    'Daftar lomba Digital Canvas EXPO TRPL 2026 untuk siswa SMK se-Lampung: UI/UX Design, Web Design, Poster Design, dan Short Reels. Gratis, pendaftaran 16 November–3 Desember 2026.',
+    'Daftar lomba Digital Canvas EXPO TRPL 2026 untuk siswa SMK se-Lampung: UI/UX Design, Web Design, Poster Design, dan Short Reels. Pendaftaran 19 November–3 Desember 2026.',
   /** Warna bilah browser (Deep Teal). */
   themeColor: '#126878',
   /** Gambar pratinjau share (1200×630) di folder public/. */
@@ -28,6 +28,7 @@ export const nav: NavItem[] = [
   { label: 'Lomba', href: '#lomba' },
   { label: 'Timeline', href: '#timeline' },
   { label: 'Registration', href: '#registration' },
+  { label: 'Partner', href: '#partners' },
   { label: 'FAQ', href: '#faq' },
 ];
 

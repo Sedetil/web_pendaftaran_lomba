@@ -65,6 +65,8 @@ export interface Competition {
   summary: string;
   /** Format peserta, mis. "Tim 3 orang" atau "Perorangan". */
   team: string;
+  /** Biaya pendaftaran cabang lomba. */
+  fee: string;
   /** Alur babak lomba. */
   rounds: string;
   /** Path PDF guidebook di folder public, mis. "/guidebook/guidebook-uiux.pdf". */
@@ -167,7 +169,7 @@ export const event: EventConfig = {
   identity: 'Software Engineering Competition',
   series: 'EXPO TRPL 2026',
   description:
-    'Lomba UI/UX Design, Web Design, Poster Design, dan Short Reels untuk siswa SMK se-Lampung dalam rangkaian EXPO TRPL 2026. Pendaftaran gratis, dibuka sampai 3 Desember 2026.',
+    'Lomba UI/UX Design, Web Design, Poster Design, dan Short Reels untuk siswa SMK se-Lampung dalam rangkaian EXPO TRPL 2026. Pendaftaran & pengumpulan karya dibuka 19 November – 3 Desember 2026.',
 
   dateStart: '2026-12-10', // Babak final di SMK Negeri 8 Bandar Lampung
   dateEnd: '2026-12-10',
@@ -198,6 +200,7 @@ export const event: EventConfig = {
       summary:
         'Rancang aplikasi atau platform digital untuk masalah nyata di masyarakat dalam bentuk high-fidelity interactive prototype di Figma.',
       team: 'Tim 3 orang',
+      fee: 'Rp50.000 / tim',
       rounds: 'Penyisihan daring (proposal PDF + tautan Figma), final luring 5 tim',
       guidebook: '/guidebook/guidebook-uiux.pdf',
       contact: {
@@ -213,6 +216,7 @@ export const event: EventConfig = {
       summary:
         'Bangun landing page yang responsif, interaktif, dan sudah online untuk masalah nyata yang berkaitan dengan Lampung.',
       team: 'Tim 3 orang',
+      fee: 'Rp50.000 / tim',
       rounds: 'Penyisihan daring (tautan website, repositori, proposal), final luring',
       guidebook: '/guidebook/guidebook-web-design.pdf',
       contact: {
@@ -228,6 +232,7 @@ export const event: EventConfig = {
       summary:
         'Buat poster kampanye digital ukuran A3 bertema Visualizing Change Through Creative Ideas, lengkap dengan deskripsi konsep.',
       team: 'Perorangan',
+      fee: 'Rp20.000 / orang',
       rounds: 'Penyisihan daring (poster + deskripsi), final luring 5 finalis',
       guidebook: '/guidebook/guidebook-poster-design.pdf',
       contact: {
@@ -244,6 +249,7 @@ export const event: EventConfig = {
       summary:
         'Rekam dan sunting video potret maksimal 1 menit 30 detik tentang kegiatan EXPO TRPL 2026, dikerjakan 3 jam di lokasi.',
       team: 'Perorangan',
+      fee: 'Rp20.000 / orang',
       rounds: 'Langsung di lokasi, 10 Desember 2026',
       guidebook: '/guidebook/guidebook-short-reels.pdf',
       contact: {
@@ -258,22 +264,20 @@ export const event: EventConfig = {
   ],
 
   registration: {
-    open: '2026-11-16',
+    open: '2026-11-19',
     close: '2026-12-03',
-    fee: 'Gratis',
+    fee: '50k (Tim) · 20k (Individu)',
     requirements: [
-      'Siswa/i aktif SMK se-Lampung, dibuktikan dengan kartu pelajar atau surat keterangan siswa aktif.',
-      'Melampirkan Surat Pernyataan Keaslian Karya yang telah diisi dan ditandatangani perwakilan tim serta kepala sekolah.',
-      'Setiap peserta hanya boleh terdaftar di 1 tim dan 1 cabang lomba.',
-      'UI/UX Design dan Web Design: tim 3 orang dari sekolah yang sama, dengan 1 ketua tim.',
-      'Poster Design dan Short Reels: perorangan.',
-      'Setiap sekolah boleh mengirim peserta tanpa batas jumlah.',
+      'Siswa/i aktif SMK se-Lampung (kartu pelajar atau surat aktif sekolah).',
+      'Format peserta: Tim 3 orang (UI/UX & Web) atau Perorangan (Poster & Reels).',
+      'Setiap peserta hanya boleh terdaftar di 1 cabang lomba.',
+      'Melampirkan Surat Pernyataan Keaslian Karya yang telah diisi dan ditandatangani.',
+      'Setiap sekolah bebas mengirimkan peserta tanpa batas kuota.',
     ],
     steps: [
-      'Pilih cabang lomba yang ingin kamu ikuti pada bagian Cabang Lomba.',
-      'Unduh dan baca guidebook cabang lomba terkait. Link pendaftaran dan pengumpulan karya tertera di dalamnya.',
-      'Siapkan kartu pelajar/surat aktif dan unduh serta lengkapi Surat Pernyataan Keaslian Karya.',
-      'Buka formulir pendaftaran melalui tautan di dalam guidebook dan kirim karya sebelum batas akhir 3 Desember 2026.',
+      'Pilih cabang lomba dan unduh guidebook di bagian Cabang Lomba.',
+      'Siapkan berkas: kartu pelajar dan Surat Pernyataan Keaslian Karya.',
+      'Buka link pendaftaran di guidebook dan kirim karya sebelum 3 Desember 2026.',
     ],
     formUrl: null, // Note: Link pendaftaran & pengumpulan tertera di guidebook masing-masing cabang lomba.
   },
@@ -282,14 +286,14 @@ export const event: EventConfig = {
   timeline: [
     {
       title: 'Pendaftaran & Pengumpulan',
-      description: 'Pendaftaran peserta dan pengumpulan karya dibuka bersamaan lewat tautan di guidebook tiap cabang.',
-      start: '2026-11-16',
+      description: 'Pendaftaran peserta dan pengumpulan karya daring via link di guidebook tiap cabang.',
+      start: '2026-11-19',
       end: '2026-12-03',
       time: null,
     },
     {
       title: 'Penjurian Penyisihan',
-      description: 'Dewan juri menilai berkas, portofolio, dan karya babak penyisihan secara daring.',
+      description: 'Penilaian karya babak penyisihan secara daring oleh dewan juri.',
       start: '2026-12-04',
       end: null,
       time: null,
@@ -322,23 +326,19 @@ export const event: EventConfig = {
       question: 'Siapa yang boleh ikut?',
       answer: 'Siswa/i aktif SMK se-Lampung, dibuktikan dengan kartu pelajar atau surat keterangan siswa aktif.',
     },
-    { question: 'Apakah pendaftaran dipungut biaya?', answer: 'Tidak. Pendaftaran semua cabang lomba gratis.' },
     {
-      question: 'Lomba diikuti perorangan atau tim?',
-      answer: 'UI/UX Design dan Web Design diikuti tim 3 orang dari sekolah yang sama. Poster Design dan Short Reels diikuti perorangan.',
+      question: 'Berapa biaya pendaftarannya?',
+      answer:
+        'UI/UX Design dan Web Design sebesar Rp50.000 per tim. Untuk Poster Design dan Short Reels sebesar Rp20.000 per orang.',
     },
     {
       question: 'Boleh ikut lebih dari satu cabang lomba?',
       answer: 'Tidak. Setiap peserta hanya boleh terdaftar di 1 tim dan 1 cabang lomba.',
     },
     {
-      question: 'Di mana aturan lengkap tiap lomba?',
-      answer: 'Di guidebook masing-masing cabang lomba. Buka lewat tombol Lihat guidebook di bagian Lomba.',
-    },
-    {
-      question: 'Di mana link pendaftaran dan pengumpulan karya?',
+      question: 'Di mana aturan teknis dan link pendaftaran lomba?',
       answer:
-        'Semua link pendaftaran dan pengumpulan tertera langsung di dalam masing-masing guidebook cabang lomba. Silakan unduh guidebook di bagian Cabang Lomba.',
+        'Ketentuan teknis, format karya, serta tautan formulir pendaftaran dan pengumpulan tertera lengkap di dalam guidebook masing-masing cabang lomba.',
     },
     {
       question: 'Di mana mengunduh format Surat Pernyataan Keaslian Karya?',

@@ -60,7 +60,6 @@ const taglineParts = event.tagline.split(/(?<=Ideas,)\s/);
               ))
             }
           </p>
-          <p class="mt-4 hidden max-w-[58ch] text-lead sm:block lg:[@media(max-height:820px)]:hidden">{event.description}</p>
           <div class="mt-6 flex flex-col gap-3 [@media(max-width:639px)_and_(max-height:820px)]:mt-5 sm:mt-7 sm:flex-row">
             <a href={cta.href} {...ext} class="btn btn--primary" data-cta="hero">
               {primaryCta}
