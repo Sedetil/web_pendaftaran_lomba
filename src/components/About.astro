@@ -2,6 +2,8 @@
 import { Picture } from 'astro:assets';
 import guidebookCover from '../assets/guidebook-cover.jpeg';
 import { event } from '../data/event';
+import { Hammer, Lightbulb, Presentation, Handshake, Info, Target, Users, Trophy } from '@lucide/astro';
+import IconTile from './IconTile.astro';
 import { TBA } from '../utils/event-helpers';
 
 // Kata kunci pada pernyataan yang menyala dengan warna aksen (moment word-highlight).
@@ -10,16 +12,16 @@ const tokens = event.about.statement.split(/\s+/).map((w) => ({ w, key: KEY.test
 
 // Tiga tahap dari tagline sampul.
 const pillars = [
-  { no: '01', en: 'Build Skills', id: 'Asah kemampuan' },
-  { no: '02', en: 'Challenge Ideas', id: 'Uji ide di lomba' },
-  { no: '03', en: 'Present Solutions', id: 'Presentasikan solusi' },
-  { no: '04', en: 'Collaboration', id: 'Berkarya bersama tim' },
+  { no: '01', en: 'Build Skills', id: 'Asah kemampuan', icon: Hammer },
+  { no: '02', en: 'Challenge Ideas', id: 'Uji ide di lomba', icon: Lightbulb },
+  { no: '03', en: 'Present Solutions', id: 'Presentasikan solusi', icon: Presentation },
+  { no: '04', en: 'Collaboration', id: 'Berkarya bersama tim', icon: Handshake },
 ];
 
 const details = [
-  { q: 'Apa itu Digital Canvas', a: event.about.what },
-  { q: 'Mengapa diadakan', a: event.about.why },
-  { q: 'Siapa yang bisa ikut', a: event.about.who },
+  { q: 'Apa itu Digital Canvas', a: event.about.what, icon: Info },
+  { q: 'Mengapa diadakan', a: event.about.why, icon: Target },
+  { q: 'Siapa yang bisa ikut', a: event.about.who, icon: Users },
 ];
 ---
 
@@ -47,10 +49,15 @@ const details = [
     <ol class="mt-auto grid gap-0 pt-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4">
       {
         pillars.map((p) => (
-          <li class="flex items-baseline gap-4 border-t border-line py-4 sm:block sm:py-5">
-            <span class="font-display text-small font-semibold text-teal-deep">{p.no}</span>
-            <span class="font-display text-h3 leading-tight font-semibold sm:mt-3 sm:block">{p.en}</span>
-            <span class="ml-auto text-small text-muted sm:mt-1 sm:ml-0 sm:block">{p.id}</span>
+          <li class="flex items-center gap-4 border-t border-line py-3.5 sm:block sm:py-5">
+            <div class="flex items-center justify-between sm:mb-4">
+              <IconTile icon={p.icon} size="md" />
+              <span class="hidden font-display text-small font-semibold text-teal-deep sm:inline">{p.no}</span>
+            </div>
+            <div class="min-w-0">
+              <span class="block font-display text-h3 leading-tight font-semibold">{p.en}</span>
+              <span class="block text-small text-muted sm:mt-1">{p.id}</span>
+            </div>
           </li>
         ))
       }
@@ -69,15 +76,17 @@ const details = [
       <dl class="mt-8 flex flex-col max-sm:flex-1 max-sm:justify-between lg:mt-10">
         {
           details.map((d) => (
-            <div class="grid gap-1 border-t border-line-dark py-4">
+            <div class="grid grid-cols-[2.75rem_1fr] gap-x-4 gap-y-1 border-t border-line-dark py-4">
+              <IconTile icon={d.icon} tone="dark" size="md" class="row-span-2" />
               <dt class="font-display text-[1.0625rem] font-medium tracking-wide uppercase">{d.q}</dt>
-              <dd class:list={[!d.a && 'font-semibold text-peach']}>{d.a ?? TBA}</dd>
+              <dd class:list={['col-start-2', !d.a && 'font-semibold text-peach']}>{d.a ?? TBA}</dd>
             </div>
           ))
         }
-        <div class="grid gap-1 border-y border-line-dark py-4">
+        <div class="grid grid-cols-[2.75rem_1fr] gap-x-4 gap-y-1 border-y border-line-dark py-4">
+          <IconTile icon={Trophy} tone="dark" size="md" class="row-span-2" />
           <dt class="font-display text-[1.0625rem] font-medium tracking-wide uppercase">Yang kamu dapat</dt>
-          <dd>
+          <dd class="col-start-2">
             <ul class="space-y-1.5">
               {
                 event.about.gains.map((g) => (

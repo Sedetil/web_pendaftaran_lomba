@@ -1,7 +1,19 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import { CalendarClock, Wallet, FileDown } from '@lucide/astro';
+import { CalendarClock, Wallet, FileDown, IdCard, Users, Layers, Signature, School, CircleCheck } from '@lucide/astro';
+import IconTile from './IconTile.astro';
+
+/** Ikon persyaratan dipilih dari kata kunci, jadi tetap cocok bila urutan diubah. */
+function reqIcon(text: string) {
+  const t = text.toLowerCase();
+  if (t.includes('surat pernyataan')) return Signature;
+  if (t.includes('kartu pelajar') || t.includes('siswa/i')) return IdCard;
+  if (t.includes('tim') || t.includes('perorangan')) return Users;
+  if (t.includes('cabang')) return Layers;
+  if (t.includes('sekolah')) return School;
+  return CircleCheck;
+}
 import { event } from '../data/event';
 import { TBA, formatDate, formatRange } from '../utils/event-helpers';
 
@@ -58,12 +70,12 @@ const docBytes = docSize(statementDocPath);
       <h3 class="mt-6 text-h3 font-semibold uppercase sm:mt-8">Persyaratan peserta</h3>
       {
         reg.requirements.length ? (
-          <ul class="mt-3 space-y-2">
+          <ul class="mt-4 grid gap-2.5">
             {reg.requirements.map((r) => {
               const isSurat = r.includes('Surat Pernyataan Keaslian Karya');
               return (
-                <li class="flex gap-3 text-[0.9375rem] leading-relaxed text-paper/90">
-                  <span class="mt-[0.75em] h-px w-4 shrink-0 bg-peach" aria-hidden="true" />
+                <li class="flex items-center gap-3 text-[0.9375rem] leading-snug text-paper/90">
+                  <IconTile icon={reqIcon(r)} tone="dark" size="sm" />
                   <span>
                     {isSurat ? (
                       <>
@@ -129,7 +141,7 @@ const docBytes = docSize(statementDocPath);
               <a
                 href={statementDocPath}
                 download="SURAT PERNYATAAN KEASLIAN KARYA.docx"
-                class="btn btn--primary-light w-full xl:w-auto"
+                class="btn btn--primary-light w-full text-center whitespace-normal sm:whitespace-nowrap xl:w-auto"
                 data-download-surat
               >
                 <FileDown size={18} aria-hidden="true" />

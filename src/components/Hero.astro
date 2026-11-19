@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { ArrowUpRight, ArrowDown } from '@lucide/astro';
+import trplLogo from '../assets/logo/logo-trpl.jpg';
 import { event } from '../data/event';
 import { primaryCta } from '../config/site';
 import { TBA, formatRangeShort, primaryTarget } from '../utils/event-helpers';
@@ -24,14 +26,25 @@ const taglineParts = event.tagline.split(/(?<=Ideas,)\s/);
     <div
       class="hero-text relative flex min-h-svh flex-col pt-[calc(var(--nav)+16px)] pb-12 [@media(max-width:639px)_and_(max-height:820px)]:pb-10 lg:pt-[calc(var(--nav)+48px)] lg:pb-16"
     >
-      <!-- Baris identitas penyelenggara (seperti kepala sampul) -->
-      <p class="flex flex-wrap gap-x-2 text-small font-medium" style="--i:0">
+      <!-- Baris identitas penyelenggara + logo TRPL (seperti kepala sampul) -->
+      <div class="flex items-center gap-3 sm:gap-4" style="--i:0">
+      <Image
+        src={trplLogo}
+        alt="Logo TRPL Politeknik Negeri Lampung"
+        width={48}
+        height={48}
+        densities={[1, 2]}
+        loading="eager"
+        class="size-11 shrink-0 rounded-sm ring-1 ring-paper/25 [@media(max-width:639px)_and_(max-height:820px)]:size-10 sm:size-12"
+      />
+      <p class="flex flex-wrap gap-x-2 text-small leading-snug font-medium">
         <span class="w-full whitespace-nowrap sm:w-auto">{event.organizer.institution}</span>
         <span aria-hidden="true" class="hidden sm:inline">·</span>
         <span class="w-full whitespace-nowrap sm:w-auto [@media(max-width:639px)_and_(max-height:820px)]:hidden">{event.organizer.department}</span>
         <span aria-hidden="true" class="hidden sm:inline">·</span>
         <span class="w-full whitespace-nowrap sm:w-auto">{event.organizer.studyProgram}</span>
       </p>
+      </div>
 
       <!-- Judul poster: nama acara + identitas acara -->
       <h1 id="hero-title" class="mt-5 grid gap-y-4 [@media(max-width:639px)_and_(max-height:820px)]:mt-4 [@media(max-width:639px)_and_(max-height:820px)]:gap-y-3 sm:gap-y-5 lg:mt-8 lg:grid-cols-12 lg:items-start lg:gap-x-6" style="--i:1">

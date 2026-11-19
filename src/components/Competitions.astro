@@ -1,11 +1,20 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import { FileText, MousePointerClick, CodeXml, Palette, Clapperboard, Users, Flag, MessageCircle, Wallet } from '@lucide/astro';
+import { FileText, MousePointerClick, CodeXml, Palette, Clapperboard, Users, Flag, MessageCircle, Wallet, Sprout, TreePalm, Landmark, BookOpen } from '@lucide/astro';
+import IconTile from './IconTile.astro';
 import { event } from '../data/event';
 
 // Ikon per cabang lomba (berdasarkan id di event.ts).
 const ICONS = { uiux: MousePointerClick, web: CodeXml, poster: Palette, reels: Clapperboard } as const;
+
+// Ikon sub-tema (urutan mengikuti event.subthemes).
+const SUBTHEME_ICONS: Record<string, any> = {
+  Pertanian: Sprout,
+  Pariwisata: TreePalm,
+  'Budaya Lampung': Landmark,
+  Pendidikan: BookOpen,
+};
 
 /** Ukuran PDF guidebook, dibaca saat build dari folder public/. */
 function pdfSize(publicPath: string): string | null {
@@ -33,42 +42,61 @@ const items = event.competitions.map((c, i) => ({
         <p class="label text-muted">Lomba</p>
         <h2 id="lomba-title" class="h2 mt-4">Cabang lomba</h2>
       </div>
-      <p class="max-w-[44ch] text-lead lg:col-span-5 lg:col-start-8">
-        {`Pilih satu cabang lomba. Sub-tema UI/UX Design, Web Design, dan Poster Design: ${event.subthemes.join(', ').replace(/, ([^,]*)$/, ', dan $1')}.`}
-      </p>
+      <div class="lg:col-span-5 lg:col-start-8">
+        <p class="max-w-[44ch] text-lead">Pilih satu cabang lomba. Sub-tema untuk UI/UX Design, Web Design, dan Poster Design:</p>
+      </div>
+      <div class="lg:col-span-12">
+        <ul class="flex flex-wrap gap-2" aria-label="Sub-tema lomba">
+          {
+            event.subthemes.map((t) => {
+              const Icon = SUBTHEME_ICONS[t] ?? BookOpen;
+              return (
+                <li class="inline-flex min-h-8 items-center gap-2 rounded-sm border border-teal-deep/25 bg-teal-deep/[0.07] px-3 text-small font-semibold text-teal-deep">
+                  <Icon size={16} stroke-width={1.8} aria-hidden="true" />
+                  {t}
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
     </div>
 
     <ol class="mt-6 flex flex-col border-b sm:mt-8 border-line max-sm:flex-1 max-sm:justify-between lg:mt-10">
       {
         items.map((c) => (
-          <li id={`lomba-${c.id}`} class="grid gap-y-3 border-t border-line py-4 sm:py-5 md:grid-cols-12 md:gap-x-6">
-            <div class="flex items-center gap-4 md:col-span-4">
-              <span class="font-display text-small font-semibold text-teal-deep" aria-hidden="true">
-                {c.no}
-              </span>
-              <c.Icon size={30} stroke-width={1.5} aria-hidden="true" class="shrink-0 text-teal-deep" />
-              <h3 class="font-display text-[clamp(1.75rem,1.3rem+1.4vw,2.5rem)] leading-none font-semibold uppercase">
-                {c.name}
-              </h3>
+          <li id={`lomba-${c.id}`} class="grid gap-y-2.5 border-t border-line py-3.5 sm:gap-y-3 sm:py-4 md:grid-cols-12 md:gap-x-6">
+            <div class="md:col-span-4">
+              <div class="flex items-center gap-4">
+                <IconTile icon={c.Icon} size="md" />
+                <span class="font-display text-small font-semibold text-teal-deep" aria-hidden="true">
+                  {c.no}
+                </span>
+                <h3 class="font-display text-[clamp(1.75rem,1.3rem+1.4vw,2.5rem)] leading-none font-semibold uppercase">
+                  {c.name}
+                </h3>
+              </div>
+              <ul class="mt-2.5 flex flex-wrap gap-2 text-label font-semibold sm:mt-3" aria-label={`Format ${c.name}`}>
+                <li class="inline-flex min-h-7 items-center gap-1.5 rounded-sm bg-surface px-2.5 text-ink">
+                  <Users size={14} aria-hidden="true" class="shrink-0 text-teal-deep" />
+                  {c.team}
+                </li>
+                <li class="inline-flex min-h-7 items-center gap-1.5 rounded-sm bg-surface px-2.5 text-ink">
+                  <Wallet size={14} aria-hidden="true" class="shrink-0 text-teal-deep" />
+                  {c.fee}
+                </li>
+              </ul>
             </div>
 
             <div class="md:col-span-5">
               <p class="max-w-[52ch]">{c.summary}</p>
-              <ul class="mt-2.5 flex flex-wrap gap-x-5 gap-y-1.5 text-small text-muted">
-                <li class="inline-flex items-start gap-1.5">
-                  <Users size={15} aria-hidden="true" class="mt-[3px] shrink-0" />
-                  {c.team}
-                </li>
+              <ul class="mt-2 hidden flex-col gap-1.5 text-small text-muted sm:flex">
                 <li class="inline-flex items-start gap-1.5">
                   <Flag size={15} aria-hidden="true" class="mt-[3px] shrink-0" />
                   {c.rounds}
                 </li>
-                <li class="inline-flex items-start gap-1.5">
-                  <Wallet size={15} aria-hidden="true" class="mt-[3px] shrink-0 text-teal-deep" />
-                  <span class="font-medium text-ink">{c.fee}</span>
-                </li>
                 {c.contact && (
-                  <li class="inline-flex items-start gap-1.5">
+                  <li class="inline-flex items-start gap-1.5 md:hidden">
                     <MessageCircle size={15} aria-hidden="true" class="mt-[3px] shrink-0 text-teal-deep" />
                     <span>
                       Narahubung: <a href={c.contact.whatsapp} target="_blank" rel="noopener noreferrer" class="font-medium text-ink underline underline-offset-2 hover:text-teal-deep" title={`Hubungi WhatsApp ${c.contact.name}`}>{c.contact.name} ({c.contact.phone})</a>
@@ -88,19 +116,19 @@ const items = event.competitions.map((c, i) => ({
               >
                 <FileText size={18} aria-hidden="true" />
                 Lihat guidebook
-                {c.size && <span class="text-small font-normal opacity-75 md:hidden">· PDF {c.size}</span>}
+                
                 <span class="sr-only">{`${c.name} (PDF, membuka tab baru)`}</span>
               </a>
               <div class="flex flex-wrap items-center gap-x-2 text-label text-muted">
                 {c.size && <span>PDF · {c.size}</span>}
                 {c.contact && (
                   <>
-                    <span aria-hidden="true" class="hidden md:inline">·</span>
+                    <span aria-hidden="true">·</span>
                     <a
                       href={c.contact.whatsapp}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="hidden font-medium text-teal-deep hover:underline md:inline-flex items-center gap-1"
+                      class="inline-flex min-h-6 items-center gap-1 font-medium text-teal-deep hover:underline"
                       title={`Hubungi WhatsApp ${c.contact.name}`}
                     >
                       <MessageCircle size={13} aria-hidden="true" />

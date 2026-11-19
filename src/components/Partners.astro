@@ -1,15 +1,10 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
-import { MessageCircle, GraduationCap, School } from '@lucide/astro';
+import { Image } from 'astro:assets';
+import { GraduationCap, School } from '@lucide/astro';
+import IconTile from './IconTile.astro';
 import { event } from '../data/event';
-
-
-const trplLogoPath = '/assets/logo/logo-trpl.png';
-const smk8LogoPath = '/assets/logo/logo-smk-8-balam.png';
-
-const hasTrplLogo = fs.existsSync(path.join(process.cwd(), 'public', trplLogoPath));
-const hasSmk8Logo = fs.existsSync(path.join(process.cwd(), 'public', smk8LogoPath));
+import trplLogo from '../assets/logo/logo-trpl.jpg';
+import smk8Logo from '../assets/logo/logo-smk-8-balam.png';
 ---
 
 <section id="partners" class="section on-light bg-surface" aria-labelledby="partners-title">
@@ -34,25 +29,19 @@ const hasSmk8Logo = fs.existsSync(path.join(process.cwd(), 'public', smk8LogoPat
             <span class="font-display text-small font-semibold tracking-wider text-teal-deep uppercase">TRPL Polinela</span>
             <p class="text-label text-muted">Penyelenggara Utama</p>
           </div>
-          <GraduationCap size={20} class="text-teal-deep" aria-hidden="true" />
+          <IconTile icon={GraduationCap} size="sm" />
         </div>
-        <div class="my-6 flex min-h-[140px] items-center justify-center rounded border border-line/60 bg-surface/40 p-6 text-center">
-          {hasTrplLogo ? (
-            <img
-              src={trplLogoPath}
-              alt="Logo TRPL Politeknik Negeri Lampung"
-              class="max-h-24 max-w-[200px] object-contain"
-              loading="lazy"
-            />
-          ) : (
-            <div class="flex flex-col items-center">
-              <div class="flex h-14 w-14 items-center justify-center rounded-md bg-teal-deep/10 text-teal-deep font-display font-bold text-xl">
-                TRPL
-              </div>
-              <p class="mt-2 font-display text-[1.125rem] font-semibold text-ink">TRPL Polinela</p>
-              <p class="text-label text-muted">Logo menyusul</p>
-            </div>
-          )}
+        <div class="my-6 flex min-h-[140px] items-center justify-center rounded border border-line/60 bg-surface/40 p-6 text-center md:min-h-[220px] lg:min-h-[140px]">
+          <Image
+            src={trplLogo}
+            alt="Logo Program Studi Teknologi Rekayasa Perangkat Lunak (TRPL) Politeknik Negeri Lampung"
+            width={112}
+            height={112}
+            densities={[1, 2]}
+            loading="lazy"
+            decoding="async"
+            class="size-28 rounded-md object-cover"
+          />
         </div>
         <p class="text-small text-muted">Program Studi Teknologi Rekayasa Perangkat Lunak, Politeknik Negeri Lampung.</p>
       </div>
@@ -64,23 +53,18 @@ const hasSmk8Logo = fs.existsSync(path.join(process.cwd(), 'public', smk8LogoPat
             <span class="font-display text-small font-semibold tracking-wider text-teal-deep uppercase">SMKN 8 Bandar Lampung</span>
             <p class="text-label text-muted">Mitra & Lokasi Final</p>
           </div>
-          <School size={20} class="text-teal-deep" aria-hidden="true" />
+          <IconTile icon={School} size="sm" />
         </div>
-        <div class="my-6 flex min-h-[140px] items-center justify-center rounded border border-line/60 bg-surface/40 p-6 text-center">
-          {hasSmk8Logo ? (
-            <img
-              src={smk8LogoPath}
-              alt="Logo SMK Negeri 8 Bandar Lampung"
-              class="max-h-24 max-w-[180px] object-contain"
-              loading="lazy"
-            />
-          ) : (
-            <div class="flex flex-col items-center">
-              <School size={36} class="text-teal-deep" aria-hidden="true" />
-              <p class="mt-2 font-display text-[1.125rem] font-semibold text-ink">SMKN 8 Bandar Lampung</p>
-              <p class="text-label text-muted">Logo menyusul</p>
-            </div>
-          )}
+        <div class="my-6 flex min-h-[140px] items-center justify-center rounded border border-line/60 bg-surface/40 p-6 text-center md:min-h-[220px] lg:min-h-[140px]">
+          <Image
+            src={smk8Logo}
+            alt="Logo SMK Negeri 8 Bandar Lampung"
+            height={112}
+            densities={[1, 2]}
+            loading="lazy"
+            decoding="async"
+            class="h-28 w-auto object-contain"
+          />
         </div>
         <p class="text-small text-muted">Mitra institusi vokasi sekaligus lokasi pelaksanaan babak final tatap muka.</p>
       </div>

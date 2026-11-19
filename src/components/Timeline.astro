@@ -34,13 +34,13 @@ const last = items.at(-1)?.title.toLowerCase();
       </p>
     </div>
 
-    <ol class="relative mt-10 grid max-sm:flex max-sm:flex-1 max-sm:flex-col max-sm:justify-between md:grid-cols-2 md:gap-x-6 md:gap-y-14 lg:mt-auto lg:grid-cols-5 lg:gap-y-0 lg:pt-16">
+    <ol class="relative mt-8 grid sm:mt-10 max-sm:flex max-sm:flex-1 max-sm:flex-col max-sm:justify-between md:grid-cols-2 md:gap-x-6 md:gap-y-14 lg:mt-auto lg:grid-cols-5 lg:gap-y-0 lg:pt-16">
       <!-- garis lintasan -->
       <span class="absolute top-0 bottom-0 left-[7px] w-px bg-teal-deep/30 md:hidden lg:block lg:top-[calc(4rem+7px)] lg:right-0 lg:bottom-auto lg:left-0 lg:h-px lg:w-auto" aria-hidden="true"></span>
       {
         items.map((t) => (
           <li
-            class="group relative pb-6 pl-10 last:pb-0 md:pb-0 md:pl-0 lg:pt-12"
+            class="group relative pb-5 pl-10 last:pb-0 sm:pb-6 md:pb-0 md:pl-0 lg:pt-12"
             data-timeline-item
             data-start={t.start ?? undefined}
             data-end={t.effEnd ?? undefined}
