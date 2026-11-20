@@ -232,7 +232,7 @@ export const event: EventConfig = {
       summary:
         'Buat poster kampanye digital ukuran A3 bertema Visualizing Change Through Creative Ideas, lengkap dengan deskripsi konsep.',
       team: 'Perorangan',
-      fee: 'Rp20.000 / orang',
+      fee: 'Rp25.000 / orang',
       rounds: 'Penyisihan daring (poster + deskripsi), final luring 5 finalis',
       guidebook: '/guidebook/guidebook-poster-design.pdf',
       contact: {
@@ -249,7 +249,7 @@ export const event: EventConfig = {
       summary:
         'Rekam dan sunting video potret maksimal 1 menit 30 detik tentang kegiatan EXPO TRPL 2026, dikerjakan 3 jam di lokasi.',
       team: 'Perorangan',
-      fee: 'Rp20.000 / orang',
+      fee: 'Rp25.000 / orang',
       rounds: 'Langsung di lokasi, 10 Desember 2026',
       guidebook: '/guidebook/guidebook-short-reels.pdf',
       contact: {
@@ -266,7 +266,7 @@ export const event: EventConfig = {
   registration: {
     open: '2026-11-19',
     close: '2026-12-03',
-    fee: '50k (Tim) · 20k (Individu)',
+    fee: '50k (Tim) · 25k (Individu)',
     requirements: [
       'Siswa/i aktif SMK se-Lampung (kartu pelajar atau surat aktif sekolah).',
       'Format peserta: Tim 3 orang (UI/UX & Web) atau Perorangan (Poster & Reels).',
@@ -329,7 +329,7 @@ export const event: EventConfig = {
     {
       question: 'Berapa biaya pendaftarannya?',
       answer:
-        'UI/UX Design dan Web Design sebesar Rp50.000 per tim. Untuk Poster Design dan Short Reels sebesar Rp20.000 per orang.',
+        'UI/UX Design dan Web Design sebesar Rp50.000 per tim. Untuk Poster Design dan Short Reels sebesar Rp25.000 per orang.',
     },
     {
       question: 'Boleh ikut lebih dari satu cabang lomba?',
